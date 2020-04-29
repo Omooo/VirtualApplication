@@ -1,9 +1,8 @@
 package top.omooo.plugin_package;
 
+import android.content.Intent;
 import android.os.Bundle;
-
 import android.widget.Toast;
-import androidx.appcompat.app.AppCompatActivity;
 
 public class PluginActivity extends BaseActivity {
 
@@ -12,5 +11,9 @@ public class PluginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toast.makeText(mHostActivity, "Plugin Activity", Toast.LENGTH_SHORT).show();
+
+        findViewById(R.id.btn_start).setOnClickListener(
+                v -> startActivity(new Intent(mHostActivity, TestActivity.class))
+        );
     }
 }

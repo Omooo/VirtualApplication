@@ -5,11 +5,13 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.btn_load).setOnClickListener(v -> loadPlugin());
-        findViewById(R.id.btn_start).setOnClickListener( v->startPluginActivity());
+        findViewById(R.id.btn_start).setOnClickListener(v -> startPluginActivity());
     }
 
     private void loadPlugin() {
@@ -27,7 +29,12 @@ public class MainActivity extends AppCompatActivity {
     private void startPluginActivity() {
         String dexPath = getFileStreamPath("plugin.apk").getPath();
         PackageInfo packageInfo = getPackageManager().getPackageArchiveInfo(dexPath, PackageManager.GET_ACTIVITIES);
+        // 数组里面的第一个，其实就是 PluginActivity
         ActivityInfo activityInfo = packageInfo.activities[0];
+
+        for (ActivityInfo info : packageInfo.activities) {
+            Log.i(TAG, "ActivityInfo: " + info.name);
+        }
 
         Intent intent = new Intent(this, ProxyActivity.class);
         intent.putExtra(ProxyActivity.EXT_CLASS_NAME, activityInfo.name);
