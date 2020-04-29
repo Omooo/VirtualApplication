@@ -22,4 +22,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:text="启动插件里面的 Activity" />
+
+    <Button
+        android:id="@+id/btn_start_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="启动插件里面的 Service" />
 </LinearLayout>

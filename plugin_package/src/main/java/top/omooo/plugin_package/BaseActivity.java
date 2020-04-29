@@ -2,8 +2,8 @@ package top.omooo.plugin_package;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 
@@ -70,14 +70,16 @@ public class BaseActivity extends Activity implements ActivityInterface {
     }
 
     public void startActivity(Intent intent) {
-        // 仍给宿主 Activity 去启动
+        // 扔给宿主 Activity 去启动
         Intent newIntent = new Intent();
         newIntent.putExtra("ext_class_name", intent.getComponent().getClassName());
         mHostActivity.startActivity(newIntent);
     }
 
-    @Override
-    public Resources getResources() {
-        return mHostActivity.getResources();
+    public ComponentName startService(Intent intent) {
+        // 扔给宿主 Activity 去启动
+        Intent newIntent = new Intent();
+        newIntent.putExtra("ext_class_name", intent.getComponent().getClassName());
+        return mHostActivity.startService(newIntent);
     }
 }

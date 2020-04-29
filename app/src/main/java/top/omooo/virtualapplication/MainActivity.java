@@ -1,5 +1,6 @@
 package top.omooo.virtualapplication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
@@ -14,16 +15,17 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(newBase);
+        PluginManager.getInstance(this).loadPlugin();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        findViewById(R.id.btn_load).setOnClickListener(v -> loadPlugin());
         findViewById(R.id.btn_start).setOnClickListener(v -> startPluginActivity());
-    }
-
-    private void loadPlugin() {
-        PluginManager.getInstance(this).loadPlugin();
     }
 
     private void startPluginActivity() {

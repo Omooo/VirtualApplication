@@ -1,6 +1,7 @@
 package top.omooo.virtualapplication;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -50,5 +51,14 @@ public class ProxyActivity extends Activity {
         Intent proxyIntent = new Intent(this, ProxyActivity.class);
         proxyIntent.putExtra(EXT_CLASS_NAME, className);
         super.startActivity(proxyIntent);
+    }
+
+    @Override
+    public ComponentName startService(Intent intent) {
+        String className = intent.getStringExtra(EXT_CLASS_NAME);
+        // 传给自己，然后调用自己的 onCreate 方法
+        Intent proxyIntent = new Intent(this, ProxyService.class);
+        proxyIntent.putExtra(EXT_CLASS_NAME, className);
+        return super.startService(proxyIntent);
     }
 }

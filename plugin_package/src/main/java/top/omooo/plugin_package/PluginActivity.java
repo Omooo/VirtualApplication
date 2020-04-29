@@ -15,5 +15,8 @@ public class PluginActivity extends BaseActivity {
         findViewById(R.id.btn_start).setOnClickListener(
                 v -> startActivity(new Intent(mHostActivity, TestActivity.class))
         );
+        findViewById(R.id.btn_start_service).setOnClickListener(
+                v -> startService(new Intent(mHostActivity, TestService.class))
+        );
     }
 }
