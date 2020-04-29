@@ -1,0 +1,4 @@
+include ':app'
+rootProject.name='VirtualApplication'
+include ':plugin_package'
+include ':stander'
