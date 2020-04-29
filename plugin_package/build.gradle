@@ -21,9 +21,26 @@ android {
 
 }
 
+android.applicationVariants.all { variant ->
+    // Copy Debug artifact to App's assets and rename
+    if (variant.name == "debug") {
+        variant.outputs.each { output ->
+            File originFile = output.outputFile
+            println originFile.absolutePath
+            copy {
+                from originFile
+                into "$rootDir/app/src/main/assets"
+                rename(originFile.name, "plugin.apk")
+            }
+        }
+    }
+}
+
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation project(path: ':stander')
 }
