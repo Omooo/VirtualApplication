@@ -92,8 +92,6 @@ public class BaseActivity extends Activity implements ActivityInterface {
 
     public void sendBroadcast(Intent intent) {
         // 扔给宿主 Activity 去发送广播
-        Intent newIntent = new Intent();
-        newIntent.putExtra("ext_class_name", intent.getComponent().getClassName());
-        mHostActivity.sendBroadcast(newIntent);
+        mHostActivity.sendBroadcast(intent);
     }
 }

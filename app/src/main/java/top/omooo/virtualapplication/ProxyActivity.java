@@ -11,7 +11,6 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 
 import top.omooo.stander.ActivityInterface;
-import top.omooo.stander.BroadcastReceiverInterface;
 
 /**
  * Author: Omooo
@@ -65,19 +64,12 @@ public class ProxyActivity extends Activity {
     }
 
     public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
-        return super.registerReceiver(receiver, filter);
+        String receiverName = receiver.getClass().getName();
+        return super.registerReceiver(new ProxyReceiver(receiverName), filter);
     }
 
     @Override
     public void sendBroadcast(Intent intent) {
-        String className = intent.getStringExtra(EXT_CLASS_NAME);
-        Class clazz = null;
-        try {
-            clazz = PluginManager.getInstance(this).getClassLoader().loadClass(className);
-            BroadcastReceiverInterface receiverInterface = (BroadcastReceiverInterface) clazz.newInstance();
-            receiverInterface.onReceive(this, intent);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        super.sendBroadcast(intent);
     }
 }
