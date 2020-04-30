@@ -2,8 +2,10 @@ package top.omooo.plugin_package;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 
@@ -81,5 +83,17 @@ public class BaseActivity extends Activity implements ActivityInterface {
         Intent newIntent = new Intent();
         newIntent.putExtra("ext_class_name", intent.getComponent().getClassName());
         return mHostActivity.startService(newIntent);
+    }
+
+    @Override
+    public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
+        return mHostActivity.registerReceiver(receiver, filter);
+    }
+
+    public void sendBroadcast(Intent intent) {
+        // 扔给宿主 Activity 去发送广播
+        Intent newIntent = new Intent();
+        newIntent.putExtra("ext_class_name", intent.getComponent().getClassName());
+        mHostActivity.sendBroadcast(newIntent);
     }
 }

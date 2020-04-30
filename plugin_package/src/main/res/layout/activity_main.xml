@@ -20,6 +20,7 @@
         android:id="@+id/btn_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAllCaps="false"
         android:layout_marginTop="50dp"
         android:text="启动插件里面的 Activity" />
 
@@ -27,6 +28,15 @@
         android:id="@+id/btn_start_service"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAllCaps="false"
         android:layout_marginTop="50dp"
         android:text="启动插件里面的 Service" />
+
+    <Button
+        android:id="@+id/btn_start_broadcast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:layout_marginTop="50dp"
+        android:text="发送插件里面的 BroadcastReceiver" />
 </LinearLayout>

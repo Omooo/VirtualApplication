@@ -1,14 +1,17 @@
 package top.omooo.virtualapplication;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 
 import top.omooo.stander.ActivityInterface;
+import top.omooo.stander.BroadcastReceiverInterface;
 
 /**
  * Author: Omooo
@@ -18,6 +21,7 @@ import top.omooo.stander.ActivityInterface;
 public class ProxyActivity extends Activity {
 
     public static final String EXT_CLASS_NAME = "ext_class_name";
+    public static final String EXT_ACTION = "ext_action";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,7 +51,6 @@ public class ProxyActivity extends Activity {
     @Override
     public void startActivity(Intent intent) {
         String className = intent.getStringExtra(EXT_CLASS_NAME);
-        // 传给自己，然后调用自己的 onCreate 方法
         Intent proxyIntent = new Intent(this, ProxyActivity.class);
         proxyIntent.putExtra(EXT_CLASS_NAME, className);
         super.startActivity(proxyIntent);
@@ -56,9 +59,25 @@ public class ProxyActivity extends Activity {
     @Override
     public ComponentName startService(Intent intent) {
         String className = intent.getStringExtra(EXT_CLASS_NAME);
-        // 传给自己，然后调用自己的 onCreate 方法
         Intent proxyIntent = new Intent(this, ProxyService.class);
         proxyIntent.putExtra(EXT_CLASS_NAME, className);
         return super.startService(proxyIntent);
+    }
+
+    public Intent registerReceiver(BroadcastReceiver receiver, IntentFilter filter) {
+        return super.registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void sendBroadcast(Intent intent) {
+        String className = intent.getStringExtra(EXT_CLASS_NAME);
+        Class clazz = null;
+        try {
+            clazz = PluginManager.getInstance(this).getClassLoader().loadClass(className);
+            BroadcastReceiverInterface receiverInterface = (BroadcastReceiverInterface) clazz.newInstance();
+            receiverInterface.onReceive(this, intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
