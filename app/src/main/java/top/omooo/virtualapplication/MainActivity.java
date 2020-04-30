@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         findViewById(R.id.btn_start).setOnClickListener(v -> startPluginActivity());
+        // 注册静态广播
+        findViewById(R.id.btn_register).setOnClickListener(v -> PluginManager.getInstance(this).parserApkAction());
     }
 
     private void startPluginActivity() {

@@ -1,12 +1,20 @@
 package top.omooo.virtualapplication;
 
+import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.IntentFilter;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.widget.Toast;
 import dalvik.system.DexClassLoader;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 /**
  * Author: Omooo
@@ -63,5 +71,43 @@ public class PluginManager {
 
     public Resources getResources() {
         return mPluginResources;
+    }
+
+    @SuppressLint("PrivateApi")
+    public void parserApkAction() {
+        try {
+            Class packageParserClass = Class.forName("android.content.pm.PackageParser");
+            Object packageParser = packageParserClass.newInstance();
+            Method method = packageParserClass.getMethod("parsePackage", File.class, int.class);
+            File extractFile = mContext.getFileStreamPath(mApkName);
+            Object packageObject = method.invoke(packageParser, extractFile, PackageManager.GET_RECEIVERS);
+            Field receiversFields = packageObject.getClass().getDeclaredField("receivers");
+            ArrayList arrayList = (ArrayList) receiversFields.get(packageObject);
+
+            Class packageUserStateClass = Class.forName("android.content.pm.PackageUserState");
+            Class userHandleClass = Class.forName("android.os.UserHandle");
+            int userId = (int) userHandleClass.getMethod("getCallingUserId").invoke(null);
+
+            for (Object activity : arrayList) {
+                Class component = Class.forName("android.content.pm.PackageParser$Component");
+                Field intents = component.getDeclaredField("intents");
+                // 1.获取 Intent-Filter
+                ArrayList<IntentFilter> intentFilterList = (ArrayList<IntentFilter>) intents.get(activity);
+                // 2.需要获取到广播的全类名，通过 ActivityInfo 获取
+                // ActivityInfo generateActivityInfo(Activity a, int flags, PackageUserState state, int userId)
+                Method generateActivityInfoMethod = packageParserClass
+                        .getMethod("generateActivityInfo", activity.getClass(), int.class,
+                                packageUserStateClass, int.class);
+                ActivityInfo activityInfo = (ActivityInfo) generateActivityInfoMethod.invoke(null, activity, 0,
+                        packageUserStateClass.newInstance(), userId);
+                Class broadcastReceiverClass = getClassLoader().loadClass(activityInfo.name);
+                BroadcastReceiver broadcastReceiver = (BroadcastReceiver) broadcastReceiverClass.newInstance();
+                for (IntentFilter intentFilter : intentFilterList) {
+                    mContext.registerReceiver(broadcastReceiver, intentFilter);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

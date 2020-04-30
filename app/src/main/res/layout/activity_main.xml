@@ -14,4 +14,11 @@
         android:text="启动插件 Activity"
         android:textAllCaps="false" />
 
+    <Button
+        android:id="@+id/btn_register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="注册插件中的静态广播"
+        android:textAllCaps="false" />
+
 </LinearLayout>

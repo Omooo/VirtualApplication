@@ -38,5 +38,13 @@
         android:layout_height="wrap_content"
         android:textAllCaps="false"
         android:layout_marginTop="50dp"
-        android:text="发送插件里面的 BroadcastReceiver" />
+        android:text="发送插件里面的动态广播 TestReceiver" />
+
+    <Button
+        android:id="@+id/btn_send_static"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:layout_marginTop="50dp"
+        android:text="发送插件里面的静态广播 TestStaticReceiver" />
 </LinearLayout>

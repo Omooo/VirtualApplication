@@ -20,7 +20,12 @@ public class PluginActivity extends BaseActivity {
         findViewById(R.id.btn_start_service).setOnClickListener(
                 v -> startService(new Intent(mHostActivity, TestService.class))
         );
+        // 发送静态广播
+        findViewById(R.id.btn_send_static).setOnClickListener(
+                v -> sendBroadcast(new Intent("static_receiver"))
+        );
 
+        // 动态广播的注册与发送
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ACTION_RECEIVER);
         registerReceiver(new TestReceiver(), intentFilter);

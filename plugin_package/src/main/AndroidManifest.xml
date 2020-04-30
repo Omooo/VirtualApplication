@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="top.omooo.plugin_package">
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -17,7 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="top.omooo.virtualapplication.ProxyService" />
+        <receiver
+            android:name=".TestStaticReceiver"
+            android:permission="@null">
+            <intent-filter>
+                <action android:name="static_receiver" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
